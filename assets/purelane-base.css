@@ -60,6 +60,21 @@ details:not([open]) > .search-modal {
   display: none;
 }
 
+/* The footer renders over the light ground. The base theme derives its text
+   colour from a colour-scheme variable that can resolve to near-white and fail
+   contrast, so pin the footer to dark ink for a reliable, readable result. */
+.footer,
+.footer .footer-block__heading,
+.footer .field__label,
+.footer a,
+.footer small,
+.footer .copyright__content {
+  color: var(--paper);
+}
+.footer .field__input {
+  color: var(--surface);
+}
+
 /* ---------- type scale ---------- */
 .d1,
 .d2,
