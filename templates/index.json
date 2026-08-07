@@ -1,4 +1,52 @@
 {
-  "sections": {},
-  "order": []
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {
+        "scene": 1,
+        "kicker": "Plant-based homecare",
+        "heading": "Clean\nThat",
+        "heading_accent": "Lasts",
+        "body": "Homecare that works on the toughest grime, made from plants. Kind to your home, your family and the world outside it.",
+        "cta_primary_label": "Shop now",
+        "cta_primary_link": "shopify://collections/bestsellers",
+        "cta_secondary_label": "Best combos",
+        "cta_secondary_link": "shopify://collections/combos"
+      },
+      "blocks": {
+        "badge-1": { "type": "badge", "settings": { "icon": "leaf", "label": "Plant\npowered" } },
+        "badge-2": { "type": "badge", "settings": { "icon": "shield", "label": "Safe for\nkids & pets" } },
+        "badge-3": { "type": "badge", "settings": { "icon": "no-harsh", "label": "Zero harsh\nchemicals" } },
+        "slide-1": {
+          "type": "slide",
+          "settings": {
+            "label": "Single bottle",
+            "offer_product": "foaming-kitchen-cleaner",
+            "product_1": "foaming-kitchen-cleaner"
+          }
+        },
+        "slide-2": {
+          "type": "slide",
+          "settings": {
+            "label": "Any 2 products",
+            "offer_product": "tap-limescale-remover",
+            "product_1": "tap-limescale-remover",
+            "product_2": "foaming-kitchen-cleaner"
+          }
+        },
+        "slide-3": {
+          "type": "slide",
+          "settings": {
+            "label": "Any 3 products",
+            "offer_product": "kitchen-essentials-combo",
+            "product_1": "tap-limescale-remover",
+            "product_2": "copper-bronze-brass-cleaner",
+            "product_3": "foaming-kitchen-cleaner"
+          }
+        }
+      },
+      "block_order": ["badge-1", "badge-2", "badge-3", "slide-1", "slide-2", "slide-3"]
+    }
+  },
+  "order": ["hero"]
 }
