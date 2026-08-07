@@ -94,7 +94,8 @@
   margin-top: auto;
   display: flex;
   align-items: baseline;
-  gap: 8px;
+  flex-wrap: wrap;
+  gap: 4px 8px;
   margin-bottom: 12px;
 }
 .pl-shop .card .pr .price { font-family: var(--font-heading-family); font-size: 18px; color: var(--surface); font-weight: 700; }
