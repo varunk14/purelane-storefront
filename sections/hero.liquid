@@ -1,0 +1,239 @@
+{{ 'section-hero.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'hero.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign slides = section.blocks | where: 'type', 'slide'
+  assign badges = section.blocks | where: 'type', 'badge'
+  assign scene = section.settings.scene | default: 1
+-%}
+
+<section class="pl-hero" data-scene="{{ scene }}">
+  <div class="hero-grid">
+
+    {%- if badges.size > 0 -%}
+      <div class="badges glass-2" aria-label="{{ 'sections.hero.promises' | t }}">
+        {%- for block in badges -%}
+          <div class="badge" {{ block.shopify_attributes }}>
+            <span class="bi">{% render 'hero-icon', icon: block.settings.icon %}</span>
+            <span>{{ block.settings.label | escape | newline_to_br }}</span>
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    <div class="hero-copy">
+      <h1 class="d1 rv in">
+        {{- section.settings.heading | escape | newline_to_br -}}
+        {%- if section.settings.heading_accent != blank -%}
+          <br><span class="lime">{{ section.settings.heading_accent | escape }}</span>
+        {%- endif -%}
+      </h1>
+
+      <div class="rule rv rv-d1">
+        <i></i>
+        {% render 'hero-icon', icon: 'leaf' %}
+        <i></i>
+      </div>
+
+      {%- if section.settings.body != blank -%}
+        <p class="lede rv rv-d2">{{ section.settings.body }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.cta_primary_label != blank or section.settings.cta_secondary_label != blank -%}
+        <div class="hero-cta rv rv-d3">
+          {%- if section.settings.cta_primary_label != blank -%}
+            <a class="btn btn-primary" href="{{ section.settings.cta_primary_link | default: '#' }}">
+              {{- section.settings.cta_primary_label | escape -}}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 12h13m-5-6 6 6-6 6"/></svg>
+            </a>
+          {%- endif -%}
+          {%- if section.settings.cta_secondary_label != blank -%}
+            <a class="btn btn-ghost" href="{{ section.settings.cta_secondary_link | default: '#' }}">{{ section.settings.cta_secondary_label | escape }}</a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      {%- if badges.size > 0 -%}
+        <div class="badgestrip rv rv-d4">
+          {%- for block in badges -%}
+            <div class="glass-2" {{ block.shopify_attributes }}>
+              {% render 'hero-icon', icon: block.settings.icon %}
+              {{- block.settings.label | strip_newlines | escape -}}
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- if slides.size > 0 -%}
+      <pl-hero-stage class="hero-prod">
+        <div class="hstage">
+          {%- for block in slides -%}
+            {%- liquid
+              assign p1 = block.settings.product_1
+              assign p2 = block.settings.product_2
+              assign p3 = block.settings.product_3
+              assign items = ''
+              if p1 != blank
+                assign items = items | append: 'a,'
+              endif
+              if p2 != blank
+                assign items = items | append: 'b,'
+              endif
+              if p3 != blank
+                assign items = items | append: 'c,'
+              endif
+              assign slots = items | split: ','
+              assign count = slots.size
+              if count == 0
+                assign count = 1
+              endif
+            -%}
+            <div class="hslide hs{{ count }}{% if forloop.first %} on{% endif %}" data-n="{{ count }}" {{ block.shopify_attributes }}>
+              {%- assign slide_first = forloop.first -%}
+              {%- for slot in slots -%}
+                {%- liquid
+                  case slot
+                    when 'a'
+                      assign prod = p1
+                      assign delay = 'd1'
+                    when 'b'
+                      assign prod = p2
+                      assign delay = 'd2'
+                    when 'c'
+                      assign prod = p3
+                      assign delay = 'd3'
+                  endcase
+                  assign is_lcp = false
+                  if slide_first and forloop.first
+                    assign is_lcp = true
+                  endif
+                -%}
+                <span class="hp {{ slot }} {{ delay }}">
+                  {%- assign img = prod.featured_image -%}
+                  {%- if img -%}
+                    <img
+                      src="{{ img | image_url: width: 560 }}"
+                      srcset="{{ img | image_url: width: 280 }} 280w, {{ img | image_url: width: 560 }} 560w, {{ img | image_url: width: 840 }} 840w"
+                      sizes="(max-width: 900px) 60vw, min(50vw, 560px)"
+                      width="{{ img.width }}"
+                      height="{{ img.height }}"
+                      alt="{{ img.alt | default: prod.title | escape }}"
+                      {% if is_lcp %}loading="eager" fetchpriority="high"{% else %}loading="lazy"{% endif %}>
+                  {%- else -%}
+                    {{ 'product-1' | placeholder_svg_tag: 'hero-placeholder placeholder' }}
+                  {%- endif -%}
+                </span>
+              {%- endfor -%}
+
+              {%- assign op = block.settings.offer_product -%}
+              {%- if op != blank -%}
+                {%- liquid
+                  assign price = op.price
+                  assign compare = op.compare_at_price
+                -%}
+                <div class="glass-2 ptag">
+                  <span class="lbl">{{ block.settings.label | default: op.title | escape }}</span>
+                  <span class="val">
+                    <span class="price">{{ price | money }}</span>
+                    {%- if compare > price -%}<s class="compare">{{ compare | money }}</s>{%- endif -%}
+                  </span>
+                  {%- if block.settings.savings_override != blank -%}
+                    <span class="cut">{{ block.settings.savings_override | escape }}</span>
+                  {%- elsif compare > price -%}
+                    {%- assign pct = compare | minus: price | times: 100 | divided_by: compare -%}
+                    <span class="cut">{{ 'sections.hero.percent_off' | t: percent: pct }}</span>
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+            </div>
+          {%- endfor -%}
+
+          {%- if slides.size > 1 -%}
+            <div class="hdots" role="group" aria-label="{{ 'sections.hero.choose_slide' | t }}">
+              {%- for block in slides -%}
+                <button type="button" class="{% if forloop.first %}on{% endif %}"{% if forloop.first %} aria-current="true"{% endif %} aria-label="{{ block.settings.label | default: block.settings.offer_product.title | escape }}"></button>
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+        </div>
+      </pl-hero-stage>
+    {%- elsif request.design_mode -%}
+      <div class="hero-prod">
+        <div class="hero-empty glass-2">{{ 'sections.hero.empty' | t }}</div>
+      </div>
+    {%- endif -%}
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "t:sections.hero.name",
+  "tag": "section",
+  "class": "pl-hero-section",
+  "settings": [
+    { "type": "range", "id": "scene", "label": "t:sections.hero.scene", "min": 1, "max": 4, "step": 1, "default": 1 },
+    { "type": "header", "content": "t:sections.hero.copy_header" },
+    { "type": "text", "id": "kicker", "label": "t:sections.hero.kicker" },
+    { "type": "textarea", "id": "heading", "label": "t:sections.hero.heading", "default": "Clean\nThat" },
+    { "type": "text", "id": "heading_accent", "label": "t:sections.hero.heading_accent", "default": "Lasts" },
+    { "type": "textarea", "id": "body", "label": "t:sections.hero.body", "default": "Homecare that works on the toughest grime, made from plants. Kind to your home, your family and the world outside it." },
+    { "type": "header", "content": "t:sections.hero.cta_header" },
+    { "type": "text", "id": "cta_primary_label", "label": "t:sections.hero.cta_primary_label", "default": "Shop now" },
+    { "type": "url", "id": "cta_primary_link", "label": "t:sections.hero.cta_primary_link" },
+    { "type": "text", "id": "cta_secondary_label", "label": "t:sections.hero.cta_secondary_label", "default": "Best combos" },
+    { "type": "url", "id": "cta_secondary_link", "label": "t:sections.hero.cta_secondary_link" }
+  ],
+  "blocks": [
+    {
+      "type": "badge",
+      "name": "t:sections.hero.badge.name",
+      "limit": 3,
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "t:sections.hero.badge.icon",
+          "default": "leaf",
+          "options": [
+            { "value": "leaf", "label": "t:sections.hero.badge.icons.leaf" },
+            { "value": "shield", "label": "t:sections.hero.badge.icons.shield" },
+            { "value": "no-harsh", "label": "t:sections.hero.badge.icons.no_harsh" },
+            { "value": "drop", "label": "t:sections.hero.badge.icons.drop" },
+            { "value": "sparkle", "label": "t:sections.hero.badge.icons.sparkle" },
+            { "value": "recycle", "label": "t:sections.hero.badge.icons.recycle" }
+          ]
+        },
+        { "type": "text", "id": "label", "label": "t:sections.hero.badge.label", "default": "Plant\npowered" }
+      ]
+    },
+    {
+      "type": "slide",
+      "name": "t:sections.hero.slide.name",
+      "limit": 6,
+      "settings": [
+        { "type": "text", "id": "label", "label": "t:sections.hero.slide.label", "default": "Single bottle" },
+        { "type": "product", "id": "offer_product", "label": "t:sections.hero.slide.offer_product" },
+        { "type": "product", "id": "product_1", "label": "t:sections.hero.slide.product_1" },
+        { "type": "product", "id": "product_2", "label": "t:sections.hero.slide.product_2" },
+        { "type": "product", "id": "product_3", "label": "t:sections.hero.slide.product_3" },
+        { "type": "text", "id": "savings_override", "label": "t:sections.hero.slide.savings_override" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.hero.name",
+      "blocks": [
+        { "type": "badge", "settings": { "icon": "leaf", "label": "Plant\npowered" } },
+        { "type": "badge", "settings": { "icon": "shield", "label": "Safe for\nkids & pets" } },
+        { "type": "badge", "settings": { "icon": "no-harsh", "label": "Zero harsh\nchemicals" } },
+        { "type": "slide", "settings": { "label": "Single bottle" } },
+        { "type": "slide", "settings": { "label": "Any 2 products" } },
+        { "type": "slide", "settings": { "label": "Any 3 products" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
