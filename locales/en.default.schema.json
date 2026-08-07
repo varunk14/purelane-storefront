@@ -3446,6 +3446,21 @@
         "product_3": "Product 3",
         "savings_override": "Savings override (optional)"
       }
+    },
+    "shop": {
+      "name": "Shop / product grid",
+      "scene": "Scene depth (1–4)",
+      "kicker": "Kicker",
+      "heading": "Heading",
+      "lede": "Lede",
+      "collection": "Collection",
+      "product_count": "Products to show",
+      "columns_desktop": "Columns on desktop",
+      "show_rating": "Show rating",
+      "show_badge": "Show badge",
+      "cta_behaviour": "Button action",
+      "cta_add": "Add to cart",
+      "cta_view": "View product"
     }
   }
 }

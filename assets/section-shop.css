@@ -1,0 +1,115 @@
+/*
+  Shop / product grid. Scoped under .pl-shop. The grid card markup lives in
+  snippets/product-card.liquid; its grid-variant styling lives here because the
+  grid variant only appears in this section. Geometry follows the prototype,
+  colours are the resolved light palette.
+*/
+
+.pl-shop { position: relative; z-index: 2; }
+.pl-shop .panel-head { text-align: center; margin-bottom: 26px; }
+.pl-shop .panel-head .d2 { margin-top: 12px; }
+.pl-shop .panel-head .lede { margin: 12px auto 0; }
+
+/* grid: two columns, four from 860px (merchant-set desktop count) */
+.pl-shop .shelf {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(2, 1fr);
+}
+@media (min-width: 860px) {
+  .pl-shop .shelf {
+    grid-template-columns: repeat(var(--shelf-desktop-cols, 4), 1fr);
+  }
+}
+
+.pl-shop .card {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.4s var(--ease);
+}
+.pl-shop .card:hover { transform: translateY(-5px); }
+
+.pl-shop .card .shot {
+  height: 150px;
+  border-radius: 14px;
+  margin-bottom: 14px;
+  display: grid;
+  place-items: center;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.60), rgba(236, 230, 247, 0.42));
+  border: 1px solid rgba(75, 58, 143, 0.10);
+}
+@media (max-width: 760px) {
+  .pl-shop .card .shot { height: 126px; }
+}
+.pl-shop .card .shot .pimg { height: 122px; width: auto; object-fit: contain; filter: drop-shadow(0 8px 13px rgba(0, 74, 66, 0.13)); }
+.pl-shop .card .shot .pimg--empty { display: grid; place-items: center; color: var(--brand); opacity: 0.55; }
+.pl-shop .card .shot .pimg--empty svg { height: 96px; width: auto; }
+
+.pl-shop .card .pill {
+  position: absolute;
+  top: 9px;
+  left: 9px;
+  font-size: 8.5px;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.86);
+  border: 1px solid rgba(201, 118, 29, 0.34);
+  color: #4f7d10;
+}
+
+.pl-shop .card h4 {
+  font-family: var(--font-heading-family);
+  font-size: 13.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--surface);
+  line-height: 1.2;
+  margin-bottom: 7px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.pl-shop .card h4 .card-title { color: inherit; }
+.pl-shop .card h4 .card-title:hover { color: var(--brand); }
+
+.pl-shop .card .rate {
+  font-size: 11.5px;
+  color: var(--paper-2);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.pl-shop .card .rate b { color: var(--accent); font-weight: 700; }
+
+.pl-shop .card .pr {
+  margin-top: auto;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.pl-shop .card .pr .price { font-family: var(--font-heading-family); font-size: 18px; color: var(--surface); font-weight: 700; }
+.pl-shop .card .pr .compare { font-size: 12px; color: var(--paper-3); }
+.pl-shop .card .pr .discount { font-style: normal; font-size: 10px; font-weight: 800; letter-spacing: 0.08em; color: var(--accent); }
+
+.pl-shop .card .card-cta,
+.pl-shop .card .card-cta form { width: 100%; }
+.pl-shop .card .btn { width: 100%; justify-content: center; }
+.pl-shop .card .btn[disabled] { opacity: 0.55; cursor: not-allowed; }
+
+/* empty collection state, visible in the editor */
+.pl-shop .shop-empty {
+  text-align: center;
+  color: var(--paper-2);
+  padding: clamp(26px, 3.4vw, 40px);
+  font-size: 14.5px;
+}
