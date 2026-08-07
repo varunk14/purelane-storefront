@@ -1,0 +1,128 @@
+/*
+  Fixed water backdrop. Rendered once from the layout, it sits behind every
+  section on every page. The page colour lives on <html>; the body is made
+  transparent so this layer shows through, and the layer itself is z-index -1
+  and pointer-events:none so it never intercepts input or covers content.
+  Animation names are prefixed pl- so they cannot collide with theme keyframes.
+*/
+
+html {
+  background: var(--ink);
+}
+body,
+body.gradient {
+  background: transparent;
+}
+
+.scenes {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+  background: #eee7fb;
+}
+.scene {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1.5s ease;
+}
+.scene.on { opacity: 1; }
+.s1 { background: linear-gradient(178deg, #fbfffb 0%, #eafaec 24%, #d6f1dc 54%, #bfe8ca 100%); }
+.s2 { background: linear-gradient(178deg, #f6fdf7 0%, #e3f7e7 26%, #cbedd4 58%, #b2e2c2 100%); }
+.s3 { background: linear-gradient(178deg, #f0fbf2 0%, #d9f2df 28%, #bde6c8 60%, #a2d9b6 100%); }
+.s4 { background: linear-gradient(178deg, #e9f8ec 0%, #cdedd6 30%, #addcbe 62%, #8ecdaa 100%); }
+
+/* water cinematics */
+.water {
+  position: absolute;
+  inset: -14% -10%;
+  pointer-events: none;
+  transition: opacity 1.2s ease;
+}
+.wl {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+  translate: var(--px, 0) var(--py, 0);
+}
+.wl .sv { width: 100%; height: 100%; }
+.wl-a { mix-blend-mode: soft-light; opacity: 1; animation: pl-drift-a 34s linear infinite; }
+.wl-a .sv { filter: contrast(1.25); }
+.wl-b { mix-blend-mode: overlay; opacity: 0.66; animation: pl-drift-b 23s linear infinite; }
+.wl-c { mix-blend-mode: overlay; opacity: 0.6; animation: pl-shaft-sway 19s ease-in-out infinite; }
+.wl-s { mix-blend-mode: overlay; opacity: 0.72; animation: pl-surface 11s ease-in-out infinite; transform-origin: 50% 0; }
+
+@keyframes pl-drift-a {
+  0% { transform: translate3d(-3%, 0, 0) scale(1.06); }
+  50% { transform: translate3d(3%, -1.6%, 0) scale(1.13); }
+  100% { transform: translate3d(-3%, 0, 0) scale(1.06); }
+}
+@keyframes pl-drift-b {
+  0% { transform: translate3d(4%, 1%, 0) scale(1.1); }
+  50% { transform: translate3d(-4%, -1%, 0) scale(1.04); }
+  100% { transform: translate3d(4%, 1%, 0) scale(1.1); }
+}
+@keyframes pl-shaft-sway {
+  0% { transform: translate3d(-2%, 0, 0) skewX(0deg); opacity: 0.34; }
+  50% { transform: translate3d(2%, 0, 0) skewX(2.4deg); opacity: 0.6; }
+  100% { transform: translate3d(-2%, 0, 0) skewX(0deg); opacity: 0.34; }
+}
+@keyframes pl-surface {
+  0% { transform: translateY(0) scaleY(1); opacity: 0.55; }
+  50% { transform: translateY(-1.4%) scaleY(1.14); opacity: 0.82; }
+  100% { transform: translateY(0) scaleY(1); opacity: 0.55; }
+}
+
+/* depth response: shallower scenes let more light through */
+.scenes[data-d="1"] .water { opacity: 1; }
+.scenes[data-d="2"] .water { opacity: 0.9; }
+.scenes[data-d="3"] .water { opacity: 0.76; }
+.scenes[data-d="4"] .water { opacity: 0.58; }
+.scenes[data-d="1"] .wl-s { opacity: 0.7; }
+.scenes[data-d="2"] .wl-s,
+.scenes[data-d="3"] .wl-s,
+.scenes[data-d="4"] .wl-s { opacity: 0; }
+
+/* bubbles */
+.bub { position: absolute; inset: 0; overflow: hidden; }
+.bub span {
+  position: absolute;
+  bottom: -6%;
+  left: var(--x);
+  width: var(--s);
+  height: var(--s);
+  border-radius: 50%;
+  border: 1px solid rgba(75, 58, 143, 0.26);
+  background: radial-gradient(circle at 34% 30%, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0) 64%);
+  animation: pl-rise var(--dur) linear infinite;
+  animation-delay: var(--dly);
+  opacity: 0;
+}
+@keyframes pl-rise {
+  0% { transform: translate3d(0, 0, 0); opacity: 0; }
+  12% { opacity: 0.7; }
+  88% { opacity: 0.5; }
+  100% { transform: translate3d(var(--drift), -116vh, 0); opacity: 0; }
+}
+
+/* vignette */
+.vig {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(126% 88% at 50% 26%, transparent 42%, rgba(75, 58, 143, 0.07) 80%, rgba(0, 80, 74, 0.16) 100%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.40) 0%, transparent 20%, transparent 70%, rgba(0, 84, 78, 0.10) 100%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scene,
+  .water,
+  .wl,
+  .bub span {
+    animation: none !important;
+    transition: none !important;
+  }
+}
