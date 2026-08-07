@@ -46,7 +46,22 @@
         }
       },
       "block_order": ["badge-1", "badge-2", "badge-3", "slide-1", "slide-2", "slide-3"]
+    },
+    "shop": {
+      "type": "product-grid",
+      "settings": {
+        "scene": 3,
+        "kicker": "Bestsellers",
+        "heading": "Loved by 30,000 homes",
+        "lede": "Plant-based homecare for every corner of the house, made to work on the toughest grime.",
+        "collection": "bestsellers",
+        "product_count": 12,
+        "columns_desktop": "4",
+        "show_rating": true,
+        "show_badge": true,
+        "cta_behaviour": "add_to_cart"
+      }
     }
   },
-  "order": ["hero"]
+  "order": ["hero", "shop"]
 }
