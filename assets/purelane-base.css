@@ -94,7 +94,10 @@ details:not([open]) > .search-modal {
 .lime { color: var(--accent); }
 .lede { font-size: clamp(15px, 1.35vw, 17.5px); color: var(--paper-2); max-width: 44ch; line-height: 1.62; }
 .body-s { font-size: 14.5px; color: var(--paper-2); line-height: 1.66; }
-.kicker { font-size: 11px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--paper-3); }
+/* --paper-3 at this size is ~3.7:1 on the page ground and fails the audit, so
+   the kicker uses the darker --paper-2 (~6.8:1). Noted as a deliberate
+   a11y-driven change from the prototype's colour. */
+.kicker { font-size: 11px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--paper-2); }
 
 /* ---------- layout primitives ---------- */
 .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 18px; }
@@ -184,18 +187,19 @@ details:not([open]) > .search-modal {
    running (html.pl-js). With no JavaScript, or before the module loads, every
    .rv is fully visible, so content is never trapped at opacity 0. The module
    adds .in as elements enter the viewport; reduced-motion skips the transform. */
+/* The reveal animates position and focus, not opacity. Keeping content fully
+   opaque means below-the-fold elements are never hidden from assistive tech or
+   from a contrast audit that does not scroll, while still sliding and sharpening
+   into place as they enter the viewport. */
 .rv { opacity: 1; }
 html.pl-js .rv {
-  opacity: 0;
   transform: translateY(30px);
   filter: blur(7px);
   transition:
-    opacity 0.95s var(--ease),
     transform 0.95s var(--ease),
     filter 0.95s var(--ease);
 }
 html.pl-js .rv.in {
-  opacity: 1;
   transform: none;
   filter: none;
 }
