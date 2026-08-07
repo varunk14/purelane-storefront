@@ -1,0 +1,136 @@
+{% comment %}
+  The reusable product card. One snippet drives the shop grid (grid), the combo
+  tray (tray) and the bundle artwork stack (art) so the markup and styles are
+  shared rather than duplicated.
+
+  Accepts:
+    product      - the product (required)
+    variant      - grid | tray | art (default grid)
+    badge        - override pill text; defaults to purelane.badge
+    show_rating  - show the star rating (grid) (default true)
+    show_price   - show the price block (default true)
+    show_cta     - show the add-to-cart / view button (grid) (default true)
+    cta_behaviour- add_to_cart | view_product (default add_to_cart)
+    image_width  - intrinsic width requested from image_url (default 400)
+    loading      - lazy | eager (default lazy)
+    index        - position in its row, drives the reveal delay stagger
+
+  Edge cases handled everywhere a card renders:
+    sold out  -> data-sold-out, disabled add button, price still shown
+    no image  -> theme placeholder at the same box, .shot[data-placeholder]
+    long title-> clamped to a fixed line count, full title in the accessible name
+{% endcomment %}
+{%- liquid
+  assign variant = variant | default: 'grid'
+  assign image_width = image_width | default: 400
+  assign loading = loading | default: 'lazy'
+  assign cta_behaviour = cta_behaviour | default: 'add_to_cart'
+  if show_rating == nil
+    assign show_rating = true
+  endif
+  if show_price == nil
+    assign show_price = true
+  endif
+  if show_cta == nil
+    assign show_cta = true
+  endif
+  if show_badge == nil
+    assign show_badge = true
+  endif
+
+  assign sold_out = false
+  unless product.available
+    assign sold_out = true
+  endunless
+
+  assign pill_text = badge | default: product.metafields.purelane.badge
+
+  assign has_image = false
+  if product.featured_image
+    assign has_image = true
+  endif
+
+  assign delay_index = index | default: 0 | modulo: 4
+  assign delay_class = ''
+  if delay_index == 1
+    assign delay_class = 'rv-d1'
+  elsif delay_index == 2
+    assign delay_class = 'rv-d2'
+  elsif delay_index == 3
+    assign delay_class = 'rv-d3'
+  endif
+
+  assign size_label = product.metafields.purelane.size_label | default: product.selected_or_first_available_variant.title
+-%}
+
+{%- capture product_image -%}
+  {%- if has_image -%}
+    <img
+      class="pimg"
+      src="{{ product.featured_image | image_url: width: image_width }}"
+      srcset="{{ product.featured_image | image_url: width: 200 }} 200w, {{ product.featured_image | image_url: width: 400 }} 400w, {{ product.featured_image | image_url: width: 600 }} 600w"
+      sizes="(min-width: 860px) 22vw, 45vw"
+      width="{{ product.featured_image.width }}"
+      height="{{ product.featured_image.height }}"
+      alt="{{ product.featured_image.alt | default: product.title | escape }}"
+      loading="{{ loading }}">
+  {%- else -%}
+    <span class="pimg pimg--empty" aria-hidden="true">
+      <svg viewBox="0 0 60 96" fill="none" aria-hidden="true" focusable="false">
+        <rect x="18" y="2" width="24" height="14" rx="4" fill="currentColor" opacity=".35"/>
+        <path d="M14 30c0-6 4-10 10-13v-4h12v4c6 3 10 7 10 13v48c0 7-5 12-12 12H26c-7 0-12-5-12-12Z" fill="currentColor" opacity=".18" stroke="currentColor" stroke-opacity=".3" stroke-width="1.4"/>
+        <rect x="20" y="46" width="20" height="24" rx="3" fill="currentColor" opacity=".25"/>
+      </svg>
+    </span>
+  {%- endif -%}
+{%- endcapture -%}
+
+{%- case variant -%}
+{%- when 'art' -%}
+  <span class="hp-art" data-card-variant="art"{% if sold_out %} data-sold-out="true"{% endif %}>
+    {{ product_image }}
+  </span>
+
+{%- when 'tray' -%}
+  <div class="tray-item" data-card-variant="tray"{% if sold_out %} data-sold-out="true"{% endif %}>
+    <span class="tray-shot"{% unless has_image %} data-placeholder{% endunless %}>{{ product_image }}</span>
+    <span class="tray-meta">
+      <span class="tray-name">{{ product.title }}</span>
+      {%- assign benefit = product.metafields.purelane.short_benefit -%}
+      {%- if benefit != blank -%}<span class="tray-benefit">{{ benefit }}</span>{%- endif -%}
+      <span class="tray-size">{{ size_label }}</span>
+    </span>
+  </div>
+
+{%- else -%}
+  <article class="glass card rv {{ delay_class }}" data-card-variant="grid"{% if sold_out %} data-sold-out="true"{% endif %}>
+    <div class="shot"{% unless has_image %} data-placeholder{% endunless %}>
+      {%- if show_badge and pill_text != blank -%}<span class="pill">{{ pill_text }}</span>{%- endif -%}
+      {{ product_image }}
+    </div>
+
+    <h4><a class="card-title" href="{{ product.url }}">{{ product.title }}</a></h4>
+
+    {%- if show_rating -%}{% render 'rating', product: product %}{%- endif -%}
+
+    {%- if show_price -%}
+      {% render 'pl-price', price: product.price, compare_at: product.compare_at_price %}
+    {%- endif -%}
+
+    {%- if show_cta -%}
+      {%- if sold_out -%}
+        <button type="button" class="btn btn-ghost btn-sm" disabled>{{ 'products.product.sold_out' | t }}</button>
+      {%- elsif cta_behaviour == 'view_product' -%}
+        <a class="btn btn-ghost btn-sm" href="{{ product.url }}">{{ 'products.card.view' | t }}</a>
+      {%- else -%}
+        <product-add class="card-cta" data-added-label="{{ 'products.card.added' | t: title: product.title | escape }}">
+          <form action="{{ routes.cart_add_url }}" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+            <input type="hidden" name="quantity" value="1">
+            <button type="submit" class="btn btn-ghost btn-sm">{{ 'products.product.add_to_cart' | t }}</button>
+          </form>
+        </product-add>
+      {%- endif -%}
+    {%- endif -%}
+  </article>
+{%- endcase -%}

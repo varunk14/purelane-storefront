@@ -1,0 +1,30 @@
+{% comment %}
+  Star rating with a real accessible name, e.g. "Rated 4.8 out of 5 from 237
+  reviews". The visible glyph and numbers are aria-hidden so the rating is
+  announced once, through the label, rather than as a stray star character.
+
+  Reads the standard reviews namespace so a review app can own these fields
+  later without a code change. Renders nothing when there is no rating.
+
+  Accepts:
+    product - the product whose reviews.rating / reviews.rating_count to show
+{% endcomment %}
+{%- liquid
+  assign rating_mf = product.metafields.reviews.rating
+  assign review_count = product.metafields.reviews.rating_count.value
+  assign rating_value = rating_mf.value.rating
+  assign rating_max = rating_mf.value.scale_max | default: 5
+-%}
+{%- if rating_mf and rating_value -%}
+  {%- if review_count -%}
+    {%- assign rate_label = 'products.rating.aria' | t: rating: rating_value, max: rating_max, count: review_count -%}
+  {%- else -%}
+    {%- assign rate_label = 'products.rating.aria_no_count' | t: rating: rating_value, max: rating_max -%}
+  {%- endif -%}
+  <div class="rate" role="img" aria-label="{{ rate_label | escape }}">
+    <b aria-hidden="true">&#9733; {{ rating_value }}</b>
+    {%- if review_count -%}
+      <span aria-hidden="true"> &middot; {{ 'products.rating.count' | t: count: review_count }}</span>
+    {%- endif -%}
+  </div>
+{%- endif -%}

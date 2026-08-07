@@ -214,6 +214,16 @@
       "sort_by_label": "Sort by:",
       "to": "To",
       "clear_filter": "Remove filter"
+    },
+    "percent_off": "{{ percent }}% off",
+    "rating": {
+      "aria": "Rated {{ rating }} out of {{ max }} from {{ count }} reviews",
+      "aria_no_count": "Rated {{ rating }} out of {{ max }}",
+      "count": "{{ count }} reviews"
+    },
+    "card": {
+      "view": "View product",
+      "added": "{{ title }} added to cart"
     }
   },
   "templates": {
@@ -381,6 +391,9 @@
       "choose_slide": "Choose a bundle size",
       "percent_off": "{{ percent }}% off",
       "empty": "Add a slide block to show the product rotator."
+    },
+    "shop": {
+      "empty": "Select a collection with products to fill this grid."
     }
   },
   "localization": {

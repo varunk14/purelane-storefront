@@ -1,0 +1,31 @@
+{% comment %}
+  Purelane price block with a stable structure the tests and the sections rely
+  on: .pr > .price, .compare, .discount. Named pl-price so it sits alongside the
+  base theme's own price snippet rather than replacing it.
+
+  One implementation, reused by the product card, the combo tray and the bundle
+  tiers. The discount percentage is always computed from the two prices, never
+  typed. Prices are formatted with the money filter and the shop currency.
+
+  Accepts:
+    price       - amount in the shop's minor units (required)
+    compare_at  - compare-at amount; a strikethrough and discount show when it
+                  is greater than price (optional)
+    show_discount - show the computed percentage chip (default true)
+{% endcomment %}
+{%- liquid
+  assign compare_at = compare_at | default: 0
+  if show_discount == nil
+    assign show_discount = true
+  endif
+-%}
+<div class="pr">
+  <span class="price">{{ price | money }}</span>
+  {%- if compare_at > price and compare_at > 0 -%}
+    <s class="compare">{{ compare_at | money }}</s>
+    {%- if show_discount -%}
+      {%- assign pct = compare_at | minus: price | times: 100 | divided_by: compare_at -%}
+      <span class="discount">{{ 'products.percent_off' | t: percent: pct }}</span>
+    {%- endif -%}
+  {%- endif -%}
+</div>
