@@ -53,6 +53,13 @@ body {
   font-family: var(--font-body-family);
 }
 
+/* The closed header search modal stays opacity:0 but keeps its layout, and its
+   input overflows narrow viewports by a couple of pixels. Remove it from layout
+   until the disclosure is open; the open state restores it. */
+details:not([open]) > .search-modal {
+  display: none;
+}
+
 /* ---------- type scale ---------- */
 .d1,
 .d2,
