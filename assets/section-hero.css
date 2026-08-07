@@ -108,7 +108,7 @@
   pointer-events: none;
   transition: opacity 0.85s var(--ease);
 }
-.pl-hero .hslide.on { opacity: 1; pointer-events: auto; }
+.pl-hero .hslide.on { opacity: 1; }
 .pl-hero .hp {
   position: relative;
   width: auto;
