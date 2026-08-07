@@ -1,0 +1,194 @@
+/*
+  Purelane base — resolved design tokens, type scale and shared primitives.
+  One stylesheet for the whole storefront: the section CSS files layer on top.
+  Colours are the light palette; the display type is Outfit, body is Inter,
+  both self-hosted below so nothing is fetched from a third-party font host.
+*/
+
+/* ---------- self-hosted fonts ---------- */
+@font-face {
+  font-family: 'Outfit';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('purelane-outfit.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('purelane-inter.woff2') format('woff2');
+}
+
+/* ---------- resolved tokens (light palette) ---------- */
+:root {
+  --ink: #f4f0fb;
+  --deep: #e2daf3;
+  --brand: #4b3a8f;
+  --brand-lt: #6b55b8;
+  --paper: #241a3d;
+  --paper-2: rgba(36, 26, 61, 0.78);
+  --paper-3: rgba(36, 26, 61, 0.56);
+  --accent: #b8701c;
+  --accent-2: #c9761d;
+  --surface: #17102b;
+  --g-bg: linear-gradient(158deg, rgba(255, 255, 255, 0.80), rgba(236, 230, 247, 0.56) 58%, rgba(222, 212, 240, 0.50));
+  --g-line: rgba(75, 58, 143, 0.16);
+  --g-shadow: 0 22px 54px rgba(58, 44, 112, 0.13);
+  --g-inset: inset 0 1px 0 rgba(255, 255, 255, 0.92);
+  --r: 26px;
+  --r-sm: 16px;
+  --maxw: 1180px;
+  --sec-y: 34px;
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+  /* Drive the display and body faces through our self-hosted fonts, overriding
+     the theme defaults so the whole storefront uses Outfit and Inter. */
+  --font-heading-family: 'Outfit', system-ui, sans-serif;
+  --font-body-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+body {
+  font-family: var(--font-body-family);
+}
+
+/* ---------- type scale ---------- */
+.d1,
+.d2,
+.d3,
+.d4 {
+  font-family: var(--font-heading-family);
+  text-transform: uppercase;
+  letter-spacing: -0.018em;
+  font-weight: 800;
+  line-height: 0.87;
+  color: var(--surface);
+}
+.d1 { font-size: clamp(48px, 8.6vw, 112px); }
+.d2 { font-size: clamp(30px, 4.6vw, 54px); line-height: 0.94; }
+.d3 { font-size: clamp(21px, 2.5vw, 30px); line-height: 1.04; font-weight: 700; letter-spacing: -0.01em; }
+.d4 { font-size: clamp(16px, 1.6vw, 19px); line-height: 1.14; font-weight: 700; letter-spacing: 0.005em; }
+.lime { color: var(--accent); }
+.lede { font-size: clamp(15px, 1.35vw, 17.5px); color: var(--paper-2); max-width: 44ch; line-height: 1.62; }
+.body-s { font-size: 14.5px; color: var(--paper-2); line-height: 1.66; }
+.kicker { font-size: 11px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--paper-3); }
+
+/* ---------- layout primitives ---------- */
+.wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 18px; }
+.sec { position: relative; padding: var(--sec-y) 0; }
+.sec-pad { padding: clamp(26px, 3.4vw, 40px); }
+@media (max-width: 600px) {
+  .sec-pad { padding: 22px 18px; }
+}
+
+.rule { display: flex; align-items: center; gap: 13px; margin: 0 0 20px; max-width: 270px; }
+.rule i { height: 1px; flex: 1; background: linear-gradient(90deg, rgba(75, 58, 143, 0.34), transparent); }
+.rule svg { width: 16px; height: 16px; color: var(--accent); flex: 0 0 auto; }
+
+.panel-head { text-align: center; margin-bottom: 26px; }
+.panel-head .d2 { margin-bottom: 12px; }
+.panel-head .rule { margin: 0 auto; justify-content: center; max-width: 240px; }
+.panel-head .rule i:first-child { background: linear-gradient(90deg, transparent, rgba(75, 58, 143, 0.34)); }
+
+/* ---------- glass surfaces ---------- */
+.glass {
+  background: var(--g-bg);
+  backdrop-filter: blur(24px) saturate(150%);
+  -webkit-backdrop-filter: blur(24px) saturate(150%);
+  border: 1px solid var(--g-line);
+  border-radius: var(--r);
+  box-shadow: var(--g-shadow), var(--g-inset);
+  position: relative;
+  overflow: hidden;
+}
+.glass::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background: linear-gradient(115deg, rgba(255, 255, 255, 0.55), transparent 32%, transparent 74%, rgba(201, 118, 29, 0.06));
+}
+.glass-2 {
+  background: linear-gradient(158deg, rgba(255, 255, 255, 0.66), rgba(236, 230, 247, 0.44));
+  backdrop-filter: blur(18px) saturate(135%);
+  -webkit-backdrop-filter: blur(18px) saturate(135%);
+  border: 1px solid rgba(75, 58, 143, 0.13);
+  border-radius: var(--r);
+  box-shadow: 0 16px 38px rgba(58, 44, 112, 0.10), inset 0 1px 0 rgba(255, 255, 255, 0.86);
+  position: relative;
+  overflow: hidden;
+}
+
+/* ---------- buttons ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  height: 46px;
+  padding: 0 22px;
+  border-radius: 999px;
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  transition: 0.35s var(--ease);
+  white-space: nowrap;
+}
+.btn svg { width: 15px; height: 15px; flex: 0 0 auto; }
+.btn-primary {
+  background: linear-gradient(135deg, #00706a, #004b46);
+  color: #f4fdf6;
+  box-shadow: 0 12px 26px rgba(0, 80, 74, 0.26), inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 36px rgba(0, 80, 74, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.28);
+}
+.btn-ghost {
+  background: rgba(255, 255, 255, 0.66);
+  border: 1px solid rgba(75, 58, 143, 0.22);
+  color: #01423b;
+}
+.btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.9);
+  transform: translateY(-2px);
+}
+.btn-sm { height: 38px; padding: 0 18px; font-size: 11px; letter-spacing: 0.14em; }
+
+/* ---------- reveal on scroll ----------
+   The hidden state applies only once the motion module confirms JavaScript is
+   running (html.pl-js). With no JavaScript, or before the module loads, every
+   .rv is fully visible, so content is never trapped at opacity 0. The module
+   adds .in as elements enter the viewport; reduced-motion skips the transform. */
+.rv { opacity: 1; }
+html.pl-js .rv {
+  opacity: 0;
+  transform: translateY(30px);
+  filter: blur(7px);
+  transition:
+    opacity 0.95s var(--ease),
+    transform 0.95s var(--ease),
+    filter 0.95s var(--ease);
+}
+html.pl-js .rv.in {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+.rv-d1 { transition-delay: 0.09s; }
+.rv-d2 { transition-delay: 0.18s; }
+.rv-d3 { transition-delay: 0.27s; }
+.rv-d4 { transition-delay: 0.36s; }
+.rv-d5 { transition-delay: 0.45s; }
+
+@media (prefers-reduced-motion: reduce) {
+  html.pl-js .rv,
+  html.pl-js .rv.in {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    transition: none;
+  }
+}
