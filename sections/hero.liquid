@@ -58,7 +58,7 @@
           {%- for block in badges -%}
             <div class="glass-2" {{ block.shopify_attributes }}>
               {% render 'hero-icon', icon: block.settings.icon %}
-              {{- block.settings.label | strip_newlines | escape -}}
+              {{- block.settings.label | escape | newline_to_br | replace: '<br />', ' ' | strip_newlines -}}
             </div>
           {%- endfor -%}
         </div>
