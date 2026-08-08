@@ -86,8 +86,13 @@
   margin-bottom: 10px;
   display: flex;
   align-items: center;
-  gap: 5px;
+  flex-wrap: wrap;
+  gap: 2px 5px;
 }
+/* keep "star 4.8" and "· 237 reviews" each intact; wrap between them, not mid-word,
+   on very narrow screens */
+.pl-shop .card .rate b,
+.pl-shop .card .rate span { white-space: nowrap; }
 .pl-shop .card .rate b { color: var(--accent); font-weight: 700; }
 
 .pl-shop .card .pr {
