@@ -148,15 +148,15 @@
               {%- endif -%}
             </div>
           {%- endfor -%}
-
-          {%- if slides.size > 1 -%}
-            <div class="hdots" role="group" aria-label="{{ 'sections.hero.choose_slide' | t }}">
-              {%- for block in slides -%}
-                <button type="button" class="{% if forloop.first %}on{% endif %}"{% if forloop.first %} aria-current="true"{% endif %} aria-label="{{ block.settings.label | default: block.settings.offer_product.title | escape }}"></button>
-              {%- endfor -%}
-            </div>
-          {%- endif -%}
         </div>
+
+        {%- if slides.size > 1 -%}
+          <div class="hdots" role="group" aria-label="{{ 'sections.hero.choose_slide' | t }}">
+            {%- for block in slides -%}
+              <button type="button" class="{% if forloop.first %}on{% endif %}"{% if forloop.first %} aria-current="true"{% endif %} aria-label="{{ block.settings.label | default: block.settings.offer_product.title | escape }}"></button>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
       </pl-hero-stage>
     {%- elsif request.design_mode -%}
       <div class="hero-prod">
