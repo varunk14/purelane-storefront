@@ -1,0 +1,69 @@
+{{ 'section-reviews.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign scene = section.settings.scene | default: 1
+  assign reviews = shop.metaobjects.review.values
+  assign speed = section.settings.speed | default: 52
+  assign speed_mobile = section.settings.speed_mobile | default: 40
+  assign direction = section.settings.direction | default: 'normal'
+-%}
+
+<section
+  class="pl-reviews sec"
+  data-scene="{{ scene }}"
+  style="--marq-speed: {{ speed }}s; --marq-speed-mobile: {{ speed_mobile }}s; --marq-direction: {{ direction }};"
+>
+  <div class="wrap">
+    <div class="revhead rv">
+      {%- if section.settings.kicker != blank -%}<span class="kicker">{{ section.settings.kicker }}</span>{%- endif -%}
+      {%- if section.settings.agg_rating_value != blank -%}
+        <span class="agg"><span class="st" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span> <b>{{ section.settings.agg_rating_value }}</b> {{ section.settings.agg_rating_label }}</span>
+      {%- endif -%}
+      {%- if section.settings.agg_homes_value != blank -%}
+        <span class="agg"><b>{{ section.settings.agg_homes_value }}</b> {{ section.settings.agg_homes_label }}</span>
+      {%- endif -%}
+    </div>
+  </div>
+
+  {%- if reviews.size > 0 -%}
+    <div class="revrail rv{% if section.settings.pause_hover %} pause-hover{% endif %}" tabindex="0" role="region" aria-label="{{ 'sections.reviews.rail_label' | t }}">
+      <div class="revtrack">
+        {%- for review in reviews -%}{% render 'review-card', review: review %}{%- endfor -%}
+        <div class="rev-dupe" aria-hidden="true">
+          {%- for review in reviews -%}{% render 'review-card', review: review %}{%- endfor -%}
+        </div>
+      </div>
+    </div>
+  {%- elsif request.design_mode -%}
+    <div class="wrap"><div class="reviews-empty glass sec-pad rv">{{ 'sections.reviews.empty' | t }}</div></div>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "t:sections.reviews.name",
+  "tag": "section",
+  "class": "pl-reviews-section",
+  "settings": [
+    { "type": "range", "id": "scene", "label": "t:sections.reviews.scene", "min": 1, "max": 4, "step": 1, "default": 1 },
+    { "type": "text", "id": "kicker", "label": "t:sections.reviews.kicker", "default": "That's what they said" },
+    { "type": "header", "content": "t:sections.reviews.aggregates" },
+    { "type": "text", "id": "agg_rating_value", "label": "t:sections.reviews.agg_rating_value", "default": "4.8" },
+    { "type": "text", "id": "agg_rating_label", "label": "t:sections.reviews.agg_rating_label", "default": "from 8,000+ reviews" },
+    { "type": "text", "id": "agg_homes_value", "label": "t:sections.reviews.agg_homes_value", "default": "12 lakh+" },
+    { "type": "text", "id": "agg_homes_label", "label": "t:sections.reviews.agg_homes_label", "default": "homes love Purelane" },
+    { "type": "header", "content": "t:sections.reviews.marquee" },
+    { "type": "range", "id": "speed", "label": "t:sections.reviews.speed", "min": 20, "max": 90, "step": 1, "unit": "s", "default": 52 },
+    { "type": "range", "id": "speed_mobile", "label": "t:sections.reviews.speed_mobile", "min": 15, "max": 70, "step": 1, "unit": "s", "default": 40 },
+    {
+      "type": "select", "id": "direction", "label": "t:sections.reviews.direction", "default": "normal",
+      "options": [
+        { "value": "normal", "label": "t:sections.reviews.direction_left" },
+        { "value": "reverse", "label": "t:sections.reviews.direction_right" }
+      ]
+    },
+    { "type": "checkbox", "id": "pause_hover", "label": "t:sections.reviews.pause_hover", "default": true }
+  ],
+  "presets": [{ "name": "t:sections.reviews.name" }]
+}
+{% endschema %}

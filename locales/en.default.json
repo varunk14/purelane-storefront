@@ -408,6 +408,11 @@
       "products": "Products",
       "per_unit": "Flat {{ amount }} per product",
       "empty": "Add bundle_tier entries under Content → Metaobjects to fill this section."
+    },
+    "reviews": {
+      "rail_label": "Customer reviews",
+      "rated": "Rated {{ rating }} out of 5",
+      "empty": "Add review entries under Content → Metaobjects to fill this rail."
     }
   },
   "localization": {

@@ -3481,6 +3481,23 @@
       "heading": "Heading",
       "lede": "Lede",
       "metaobject_help": "Tiers are read from the bundle_tier metaobject. Add, edit or reorder tiers under Content → Metaobjects → Bundle tier."
+    },
+    "reviews": {
+      "name": "Reviews rail",
+      "scene": "Scene depth (1–4)",
+      "kicker": "Kicker",
+      "aggregates": "Aggregate figures",
+      "agg_rating_value": "Rating value",
+      "agg_rating_label": "Rating label",
+      "agg_homes_value": "Homes value",
+      "agg_homes_label": "Homes label",
+      "marquee": "Marquee",
+      "speed": "Desktop speed",
+      "speed_mobile": "Mobile speed",
+      "direction": "Direction",
+      "direction_left": "Left",
+      "direction_right": "Right",
+      "pause_hover": "Pause on hover"
     }
   }
 }
