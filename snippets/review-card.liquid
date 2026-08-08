@@ -1,0 +1,29 @@
+{% comment %}
+  One review card, from a review metaobject entry. The stars are decorative
+  (aria-hidden) with a visually-hidden rating so the rating is announced once as
+  text rather than as five star glyphs.
+
+  Accepts:
+    review - a review metaobject entry
+{% endcomment %}
+{%- liquid
+  assign rating = review.rating.value | default: 5
+  assign author = review.author.value
+  assign context = review.product.value.title | default: review.context_label.value
+  assign verified = review.verified.value
+-%}
+<article class="glass-2 rcard">
+  <div class="st" aria-hidden="true">
+    {%- for i in (1..rating) -%}&#9733;{%- endfor -%}
+  </div>
+  <span class="visually-hidden">{{ 'sections.reviews.rated' | t: rating: rating }}</span>
+  {%- if review.title.value != blank -%}<h5>{{ review.title.value }}</h5>{%- endif -%}
+  <p>{{ review.body.value }}</p>
+  <div class="who">
+    {%- if verified -%}
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m5 13 4 4L19 7"/></svg>
+    {%- endif -%}
+    <b>{{ author }}</b>
+    {%- if context != blank -%}<span>&middot; {{ context }}</span>{%- endif -%}
+  </div>
+</article>
