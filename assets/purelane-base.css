@@ -5,21 +5,8 @@
   both self-hosted below so nothing is fetched from a third-party font host.
 */
 
-/* ---------- self-hosted fonts ---------- */
-@font-face {
-  font-family: 'Outfit';
-  font-style: normal;
-  font-weight: 100 900;
-  font-display: swap;
-  src: url('purelane-outfit.woff2') format('woff2');
-}
-@font-face {
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 100 900;
-  font-display: swap;
-  src: url('purelane-inter.woff2') format('woff2');
-}
+/* Self-hosted @font-face lives in the layout's inline style so its src can use
+   asset_url and match the preload exactly (see layout/theme.liquid). */
 
 /* ---------- resolved tokens (light palette) ---------- */
 :root {
