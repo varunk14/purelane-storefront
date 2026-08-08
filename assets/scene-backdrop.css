@@ -126,3 +126,14 @@ body.gradient {
     transition: none !important;
   }
 }
+
+/* The feTurbulence/feDisplacementMap water filters are very expensive to
+   rasterise on a throttled mobile device and dominate first paint, so drop them
+   at small widths. The caustic line-work still renders, just without the organic
+   displacement. Desktop keeps the full effect. */
+@media (max-width: 900px) {
+  .scenes .wl svg g,
+  .scenes .wl svg rect {
+    filter: none !important;
+  }
+}
