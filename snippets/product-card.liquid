@@ -92,15 +92,14 @@
   </span>
 
 {%- when 'tray' -%}
-  <div class="tray-item" data-card-variant="tray"{% if sold_out %} data-sold-out="true"{% endif %}>
-    <span class="tray-shot"{% unless has_image %} data-placeholder{% endunless %}>{{ product_image }}</span>
-    <span class="tray-meta">
-      <span class="tray-name">{{ product.title }}</span>
-      {%- assign benefit = product.metafields.purelane.short_benefit -%}
-      {%- if benefit != blank -%}<span class="tray-benefit">{{ benefit }}</span>{%- endif -%}
-      <span class="tray-size">{{ size_label }}</span>
-    </span>
-  </div>
+  {%- comment -%}
+    The combo tray item: a shared card variant showing one included product as
+    its image and a one-line benefit. Matches the prototype's .it structure.
+  {%- endcomment -%}
+  <span class="it" data-card-variant="tray"{% unless has_image %} data-placeholder{% endunless %}{% if sold_out %} data-sold-out="true"{% endif %}>
+    {{ product_image }}
+    <span>{{ product.metafields.purelane.short_benefit | default: product.title }}</span>
+  </span>
 
 {%- else -%}
   <article class="glass card rv {{ delay_class }}" data-card-variant="grid"{% if sold_out %} data-sold-out="true"{% endif %}>
