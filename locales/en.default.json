@@ -403,6 +403,11 @@
       "includes": "Includes: {{ list }}",
       "cta": "Shop bundle",
       "empty": "Select a collection of combo products to fill this rail."
+    },
+    "bundles": {
+      "products": "Products",
+      "per_unit": "Flat {{ amount }} per product",
+      "empty": "Add bundle_tier entries under Content → Metaobjects to fill this section."
     }
   },
   "localization": {

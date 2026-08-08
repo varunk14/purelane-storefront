@@ -1,0 +1,90 @@
+/*
+  Bundles. Scoped under .pl-bundles. Three tier cards driven by the bundle_tier
+  metaobject. Geometry follows the prototype, colours are the resolved light
+  palette. Small text uses --paper-2 and a darker chip green so contrast holds.
+*/
+
+.pl-bundles { position: relative; z-index: 2; }
+
+.pl-bundles .bundles-intro { margin-bottom: 16px; }
+.pl-bundles .bundles-intro .panel-head { text-align: center; margin-bottom: 0; }
+.pl-bundles .bundles-intro .d2 { margin-top: 12px; margin-bottom: 12px; }
+.pl-bundles .bundles-intro .lede { margin: 0 auto; }
+
+.pl-bundles .tiers {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 760px) {
+  .pl-bundles .tiers { grid-template-columns: repeat(3, 1fr); }
+}
+
+.pl-bundles .tier {
+  padding: 24px 22px;
+  transition: transform 0.4s var(--ease);
+}
+.pl-bundles .tier:hover { transform: translateY(-5px); }
+.pl-bundles .tier.best {
+  border-color: rgba(201, 118, 29, 0.46);
+  box-shadow: 0 22px 54px rgba(58, 44, 112, 0.14), 0 0 0 1px rgba(201, 118, 29, 0.24), var(--g-inset);
+}
+
+.pl-bundles .tier .tag {
+  display: inline-block;
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 5px 11px;
+  border-radius: 999px;
+  margin-bottom: 14px;
+  background: rgba(201, 118, 29, 0.14);
+  border: 1px solid rgba(201, 118, 29, 0.34);
+  color: #3f6410;
+}
+
+.pl-bundles .tierpix {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 2px;
+  height: 78px;
+  margin: -4px 0 16px;
+  padding: 8px 6px;
+  border-radius: 14px;
+  background: linear-gradient(162deg, rgba(255, 255, 255, 0.54), rgba(236, 230, 247, 0.34));
+  border: 1px solid rgba(75, 58, 143, 0.11);
+}
+.pl-bundles .tierpix .pimg { height: 62px; width: auto; object-fit: contain; filter: drop-shadow(0 5px 8px rgba(0, 74, 66, 0.13)); }
+.pl-bundles .tierpix .pimg--empty { display: grid; place-items: center; color: var(--brand); opacity: 0.5; }
+.pl-bundles .tierpix .pimg--empty svg { height: 48px; width: auto; }
+.pl-bundles .tierpix.five .pimg { height: 54px; }
+
+.pl-bundles .tier .qty { font-family: var(--font-heading-family); font-weight: 800; font-size: 52px; line-height: 0.9; color: var(--surface); letter-spacing: -0.03em; }
+.pl-bundles .tier .qty small { font-size: 14px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--paper-2); display: block; margin-top: 6px; }
+
+.pl-bundles .tier .price { font-family: var(--font-heading-family); font-weight: 700; font-size: 27px; color: var(--accent); margin: 16px 0 4px; }
+.pl-bundles .tier .price .compare { font-size: 14px; color: var(--paper-2); font-weight: 500; margin-left: 8px; }
+
+.pl-bundles .tier .per-unit { font-size: 12px; color: var(--paper-2); line-height: 1.66; }
+
+.pl-bundles .tier ul { list-style: none; margin: 16px 0 20px; display: grid; gap: 8px; padding: 0; }
+.pl-bundles .tier li { display: flex; gap: 9px; font-size: 13px; color: var(--paper-2); }
+.pl-bundles .tier li svg { width: 14px; height: 14px; color: var(--accent); flex: 0 0 auto; margin-top: 4px; }
+
+.pl-bundles .tier .btn { width: 100%; justify-content: center; }
+
+.pl-bundles .bundles-empty { text-align: center; color: var(--paper-2); padding: clamp(26px, 3.4vw, 40px); font-size: 14.5px; }
+
+@media (max-width: 760px) {
+  .pl-bundles .tierpix { height: 70px; }
+  .pl-bundles .tierpix .pimg { height: 54px; }
+  .pl-bundles .tierpix.five .pimg { height: 46px; }
+  .pl-bundles .tier .qty { font-size: 44px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pl-bundles .tier { transition: none; }
+  .pl-bundles .tier:hover { transform: none; }
+}

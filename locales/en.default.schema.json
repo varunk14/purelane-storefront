@@ -3473,6 +3473,14 @@
       "highlight_combo": "Highlighted combo",
       "swipe_cue": "Swipe cue text",
       "rail_note": "Rail note"
+    },
+    "bundles": {
+      "name": "Bundles",
+      "scene": "Scene depth (1–4)",
+      "kicker": "Kicker",
+      "heading": "Heading",
+      "lede": "Lede",
+      "metaobject_help": "Tiers are read from the bundle_tier metaobject. Add, edit or reorder tiers under Content → Metaobjects → Bundle tier."
     }
   }
 }

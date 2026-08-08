@@ -1,0 +1,103 @@
+{{ 'section-bundles.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign scene = section.settings.scene | default: 4
+  assign tiers = shop.metaobjects.bundle_tier.values | sort: 'product_count'
+-%}
+
+<section class="pl-bundles sec" data-scene="{{ scene }}">
+  <div class="wrap">
+    <div class="glass sec-pad rv bundles-intro">
+      <div class="panel-head">
+        {%- if section.settings.kicker != blank -%}<span class="kicker">{{ section.settings.kicker }}</span>{%- endif -%}
+        {%- if section.settings.heading != blank -%}<h2 class="d2">{{ section.settings.heading | escape }}</h2>{%- endif -%}
+        {%- if section.settings.lede != blank -%}<p class="lede">{{ section.settings.lede }}</p>{%- endif -%}
+      </div>
+    </div>
+
+    {%- if tiers.size > 0 -%}
+      <div class="tiers">
+        {%- for tier in tiers -%}
+          {%- liquid
+            assign count = tier.product_count.value | default: 0
+            assign price_val = tier.price.value | default: 0
+            assign compare_val = tier.compare_at_price.value
+            assign highlight = tier.highlight.value
+            assign features = tier.features.value
+            assign samples = tier.sample_products.value
+            assign cta_label = tier.cta_label.value | default: 'Build this box'
+            assign cta_url = tier.cta_url.value | default: '#'
+            assign price_money = price_val | times: 100 | money
+            assign unit_computed = false
+            assign per_unit_money = ''
+            if count > 0
+              assign per_unit = price_val | divided_by: count | round
+              assign per_unit_money = per_unit | times: 100 | money
+              assign unit_computed = true
+            endif
+            assign five_class = ''
+            if count >= 5
+              assign five_class = ' five'
+            endif
+          -%}
+          <article class="glass tier rv{% if highlight %} best{% endif %}" data-product-count="{{ count }}"{% if unit_computed %} data-unit-computed="true"{% endif %}>
+            <span class="tag">{{ tier.tag.value }}</span>
+
+            {%- if samples.size > 0 -%}
+              <div class="tierpix{{ five_class }}" aria-hidden="true">
+                {%- for sp in samples -%}{% render 'product-card', product: sp, variant: 'art' %}{%- endfor -%}
+              </div>
+            {%- endif -%}
+
+            <div class="qty">{{ count }}<small>{{ 'sections.bundles.products' | t }}</small></div>
+
+            <div class="price">
+              {{- price_money -}}
+              {%- if compare_val and compare_val > price_val -%}<s class="compare">{{ compare_val | times: 100 | money }}</s>{%- endif -%}
+            </div>
+
+            {%- if unit_computed -%}
+              <p class="per-unit">{{ 'sections.bundles.per_unit' | t: amount: per_unit_money }}</p>
+            {%- endif -%}
+
+            {%- if features.size > 0 -%}
+              <ul>
+                {%- for feature in features -%}
+                  <li>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m5 13 4 4L19 7"/></svg>
+                    {{ feature }}
+                  </li>
+                {%- endfor -%}
+              </ul>
+            {%- endif -%}
+
+            <a class="btn {% if highlight %}btn-primary{% else %}btn-ghost{% endif %}" href="{{ cta_url }}">
+              {{- cta_label -}}
+              {%- if highlight -%}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 12h13m-5-6 6 6-6 6"/></svg>
+              {%- endif -%}
+            </a>
+          </article>
+        {%- endfor -%}
+      </div>
+    {%- elsif request.design_mode -%}
+      <div class="bundles-empty glass sec-pad rv">{{ 'sections.bundles.empty' | t }}</div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "t:sections.bundles.name",
+  "tag": "section",
+  "class": "pl-bundles-section",
+  "settings": [
+    { "type": "range", "id": "scene", "label": "t:sections.bundles.scene", "min": 1, "max": 4, "step": 1, "default": 4 },
+    { "type": "text", "id": "kicker", "label": "t:sections.bundles.kicker", "default": "Build your bundle" },
+    { "type": "text", "id": "heading", "label": "t:sections.bundles.heading", "default": "One box. Every room." },
+    { "type": "textarea", "id": "lede", "label": "t:sections.bundles.lede", "default": "Mix and match across kitchen, laundry, home and skin. One flat price, no code needed, free shipping either way." },
+    { "type": "paragraph", "content": "t:sections.bundles.metaobject_help" }
+  ],
+  "presets": [{ "name": "t:sections.bundles.name" }]
+}
+{% endschema %}
