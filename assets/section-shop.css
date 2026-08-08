@@ -47,11 +47,16 @@
      art. Anchor the illustration to the bottom and trim it a touch so the badge
      always keeps a clear corner. */
   .pl-shop .card .shot { height: 132px; align-items: end; padding-bottom: 12px; }
-  .pl-shop .card .shot .pimg { height: 92px; }
 }
 .pl-shop .card .shot .pimg { height: 122px; width: auto; object-fit: contain; filter: drop-shadow(0 8px 13px rgba(0, 74, 66, 0.13)); }
 .pl-shop .card .shot .pimg--empty { display: grid; place-items: center; color: var(--brand); opacity: 0.55; }
 .pl-shop .card .shot .pimg--empty svg { height: 96px; width: auto; }
+/* Trim the art on mobile so it clears the corner badge. Declared after the base
+   .pimg height above so it wins at equal specificity. */
+@media (max-width: 760px) {
+  .pl-shop .card .shot .pimg { height: 92px; }
+  .pl-shop .card .shot .pimg--empty svg { height: 78px; }
+}
 
 .pl-shop .card .pill {
   position: absolute;
