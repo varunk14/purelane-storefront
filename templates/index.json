@@ -61,7 +61,21 @@
         "show_badge": true,
         "cta_behaviour": "add_to_cart"
       }
+    },
+    "combos": {
+      "type": "combos",
+      "settings": {
+        "scene": 3,
+        "kicker": "Pre-built to save you money",
+        "heading": "Best selling combos",
+        "lede": "Swipe through the boxes people order most. Each one is already priced below buying the same products on their own.",
+        "collection": "combos",
+        "max_items": 8,
+        "highlight_combo": "whole-home-combo",
+        "swipe_cue": "Swipe for more combos",
+        "rail_note": "Tapping a combo opens its product page with everything ready to add. You can still swap anything before you pay."
+      }
     }
   },
-  "order": ["hero", "shop"]
+  "order": ["hero", "shop", "combos"]
 }
