@@ -5,7 +5,23 @@
   assign slides = section.blocks | where: 'type', 'slide'
   assign badges = section.blocks | where: 'type', 'badge'
   assign scene = section.settings.scene | default: 1
+  # The hero product is the LCP element. Preload the first slide's first
+  # available product image so the browser fetches it before the section
+  # renders. The url, srcset and sizes below must stay in lockstep with the
+  # is_lcp <img> further down, or the preload is fetched and never used.
+  assign first_slide = slides.first
+  assign lcp_img = first_slide.settings.product_1.featured_image | default: first_slide.settings.product_2.featured_image | default: first_slide.settings.product_3.featured_image
 -%}
+
+{%- if lcp_img -%}
+  {% comment %}theme-check-disable AssetPreload{% endcomment %}
+  <link rel="preload" as="image"
+    href="{{ lcp_img | image_url: width: 560 }}"
+    imagesrcset="{{ lcp_img | image_url: width: 280 }} 280w, {{ lcp_img | image_url: width: 560 }} 560w, {{ lcp_img | image_url: width: 840 }} 840w"
+    imagesizes="(max-width: 900px) 60vw, min(50vw, 560px)"
+    fetchpriority="high">
+  {% comment %}theme-check-enable AssetPreload{% endcomment %}
+{%- endif -%}
 
 <section class="pl-hero" data-scene="{{ scene }}">
   <div class="hero-grid">

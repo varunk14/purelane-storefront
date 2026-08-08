@@ -291,7 +291,16 @@
       }
     {% endstyle %}
 
-    {{ 'base.css' | asset_url | stylesheet_tag }}
+    {%- comment -%}
+      base.css is the base theme's 80KB stylesheet. The homepage sections are
+      styled by purelane-base.css plus their own scoped CSS, so base.css is only
+      needed for the header, footer and cart chrome, whose own component CSS is
+      already loaded asynchronously. Load it non-render-blocking too and keep a
+      no-JS fallback, so it stops delaying first paint. purelane-base.css stays
+      blocking because it carries the above-the-fold tokens and primitives.
+    {%- endcomment -%}
+    <link rel="stylesheet" href="{{ 'base.css' | asset_url }}" media="print" onload="this.media='all'">
+    <noscript>{{ 'base.css' | asset_url | stylesheet_tag }}</noscript>
     {{ 'purelane-base.css' | asset_url | stylesheet_tag }}
     {{ 'scene-backdrop.css' | asset_url | stylesheet_tag }}
     <script src="{{ 'purelane-motion.js' | asset_url }}" defer="defer"></script>
