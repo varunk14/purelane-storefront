@@ -3461,6 +3461,18 @@
       "cta_behaviour": "Button action",
       "cta_add": "Add to cart",
       "cta_view": "View product"
+    },
+    "combos": {
+      "name": "Best-selling combos",
+      "scene": "Scene depth (1–4)",
+      "kicker": "Kicker",
+      "heading": "Heading",
+      "lede": "Lede",
+      "collection": "Combos collection",
+      "max_items": "Maximum combos",
+      "highlight_combo": "Highlighted combo",
+      "swipe_cue": "Swipe cue text",
+      "rail_note": "Rail note"
     }
   }
 }

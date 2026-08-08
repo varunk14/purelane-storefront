@@ -1,0 +1,120 @@
+{{ 'section-combos.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign scene = section.settings.scene | default: 3
+  assign combos_collection = collections[section.settings.collection]
+  assign max_items = section.settings.max_items | default: 8
+  assign highlight = section.settings.highlight_combo
+-%}
+
+<section class="pl-combos sec" data-scene="{{ scene }}">
+  <div class="wrap">
+    <div class="panel-head rv">
+      {%- if section.settings.kicker != blank -%}<span class="kicker">{{ section.settings.kicker }}</span>{%- endif -%}
+      {%- if section.settings.heading != blank -%}<h2 class="d2">{{ section.settings.heading | escape }}</h2>{%- endif -%}
+      <div class="rule">
+        <i></i>
+        {% render 'hero-icon', icon: 'leaf' %}
+        <i></i>
+      </div>
+      {%- if section.settings.lede != blank -%}<p class="lede">{{ section.settings.lede }}</p>{%- endif -%}
+    </div>
+
+    {%- if combos_collection != blank and combos_collection.products_count > 0 -%}
+      <div class="comborail rv" tabindex="0" role="region" aria-label="{{ 'sections.combos.rail_label' | t }}">
+        {%- for combo in combos_collection.products limit: max_items -%}
+          {%- liquid
+            assign included = combo.metafields.purelane.included_products.value
+            assign inc_count = included.size
+            assign sum = 0
+            for p in included
+              assign sum = sum | plus: p.price
+            endfor
+            assign price = combo.price
+            assign compare = combo.compare_at_price
+            assign saving = 0
+            assign saving_computed = false
+            if inc_count > 0 and sum > price
+              assign saving = sum | minus: price
+              assign saving_computed = true
+            elsif compare > price
+              assign saving = compare | minus: price
+              assign saving_computed = true
+            endif
+            assign is_hero = false
+            if highlight != blank and combo.id == highlight.id
+              assign is_hero = true
+            endif
+            assign flag = combo.metafields.purelane.flag
+            assign fine = combo.metafields.purelane.fine_print
+            assign saving_money = saving | money
+          -%}
+          <article class="glass combo rv{% if is_hero %} hero-combo{% endif %}"{% if saving_computed %} data-saving-computed="true"{% endif %} data-included="{{ inc_count }}">
+            <div class="tray">
+              {%- if saving_computed -%}<span class="save">{{ 'sections.combos.you_save' | t: amount: saving_money }}</span>{%- endif -%}
+              {%- if flag != blank -%}<span class="flag">{{ flag }}</span>{%- endif -%}
+              {%- if inc_count > 0 -%}
+                <div class="stack">
+                  {%- for p in included -%}
+                    {% render 'product-card', product: p, variant: 'tray' %}
+                    {%- unless forloop.last -%}<span class="plus" aria-hidden="true">+</span>{%- endunless -%}
+                  {%- endfor -%}
+                </div>
+              {%- endif -%}
+            </div>
+            <div class="body">
+              <h3>{{ combo.title }}</h3>
+              <div class="cnt">{{ 'sections.combos.count' | t: count: inc_count }}</div>
+              {%- if combo.description != blank -%}
+                <p class="inc">{{ combo.description | strip_html | truncatewords: 30 }}</p>
+              {%- elsif inc_count > 0 -%}
+                {%- capture inc_list -%}{%- for p in included -%}{{ p.title }}{%- unless forloop.last %}, {% endunless -%}{%- endfor -%}{%- endcapture -%}
+                <p class="inc">{{ 'sections.combos.includes' | t: list: inc_list }}</p>
+              {%- endif -%}
+              <div class="prow">
+                <span class="price">{{ price | money }}</span>
+                {%- if compare > price -%}<s class="compare">{{ compare | money }}</s>{%- endif -%}
+                {%- if saving_computed -%}<em class="saving">{{ 'sections.combos.save' | t: amount: saving_money }}</em>{%- endif -%}
+              </div>
+              {%- if fine != blank -%}<div class="fine">{{ fine }}</div>{%- endif -%}
+              <a class="btn {% if is_hero %}btn-primary{% else %}btn-ghost{% endif %}" href="{{ combo.url }}">
+                {{- 'sections.combos.cta' | t -}}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 12h13m-5-6 6 6-6 6"/></svg>
+              </a>
+            </div>
+          </article>
+        {%- endfor -%}
+      </div>
+
+      <div class="swipecue" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 12h13m-5-6 6 6-6 6"/></svg>
+        {{ section.settings.swipe_cue | default: 'Swipe for more combos' }}
+      </div>
+      {%- if section.settings.rail_note != blank -%}
+        <p class="railnote">{{ section.settings.rail_note }}</p>
+      {%- endif -%}
+    {%- else -%}
+      <div class="combo-empty glass sec-pad rv">{{ 'sections.combos.empty' | t }}</div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "t:sections.combos.name",
+  "tag": "section",
+  "class": "pl-combos-section",
+  "settings": [
+    { "type": "range", "id": "scene", "label": "t:sections.combos.scene", "min": 1, "max": 4, "step": 1, "default": 3 },
+    { "type": "text", "id": "kicker", "label": "t:sections.combos.kicker", "default": "Pre-built to save you money" },
+    { "type": "text", "id": "heading", "label": "t:sections.combos.heading", "default": "Best selling combos" },
+    { "type": "textarea", "id": "lede", "label": "t:sections.combos.lede", "default": "Swipe through the boxes people order most. Each one is already priced below buying the same products on their own." },
+    { "type": "collection", "id": "collection", "label": "t:sections.combos.collection" },
+    { "type": "range", "id": "max_items", "label": "t:sections.combos.max_items", "min": 2, "max": 12, "step": 1, "default": 8 },
+    { "type": "product", "id": "highlight_combo", "label": "t:sections.combos.highlight_combo" },
+    { "type": "text", "id": "swipe_cue", "label": "t:sections.combos.swipe_cue", "default": "Swipe for more combos" },
+    { "type": "textarea", "id": "rail_note", "label": "t:sections.combos.rail_note", "default": "Tapping a combo opens its product page with everything ready to add. You can still swap anything before you pay." }
+  ],
+  "presets": [{ "name": "t:sections.combos.name" }]
+}
+{% endschema %}

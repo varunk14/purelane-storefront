@@ -394,6 +394,15 @@
     },
     "shop": {
       "empty": "Select a collection with products to fill this grid."
+    },
+    "combos": {
+      "rail_label": "Best-selling combos",
+      "you_save": "You save {{ amount }}",
+      "save": "Save {{ amount }}",
+      "count": "{{ count }} products",
+      "includes": "Includes: {{ list }}",
+      "cta": "Shop bundle",
+      "empty": "Select a collection of combo products to fill this rail."
     }
   },
   "localization": {

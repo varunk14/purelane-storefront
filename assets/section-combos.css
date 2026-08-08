@@ -1,0 +1,136 @@
+/*
+  Best-selling combos. Scoped under .pl-combos. A horizontal scroll-snap rail of
+  combo cards; each card's product stack is the shared card in its tray variant.
+  Geometry follows the prototype, colours are the resolved light palette.
+*/
+
+.pl-combos { position: relative; z-index: 2; }
+.pl-combos .panel-head { text-align: center; margin-bottom: 26px; }
+.pl-combos .panel-head .d2 { margin-top: 12px; }
+.pl-combos .panel-head .lede { margin: 14px auto 0; }
+
+.pl-combos .comborail {
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  margin: 0 -18px;
+  padding: 4px 18px 14px;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.pl-combos .comborail::-webkit-scrollbar { display: none; }
+
+.pl-combos .combo {
+  flex: 0 0 302px;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  transition: transform 0.4s var(--ease);
+}
+.pl-combos .combo:hover { transform: translateY(-5px); }
+.pl-combos .combo.hero-combo {
+  border-color: rgba(201, 118, 29, 0.46);
+  box-shadow: 0 22px 54px rgba(58, 44, 112, 0.14), 0 0 0 1px rgba(201, 118, 29, 0.24), var(--g-inset);
+}
+
+.pl-combos .combo .tray {
+  padding: 14px 14px 13px;
+  position: relative;
+  background: linear-gradient(162deg, rgba(255, 255, 255, 0.56), rgba(236, 230, 247, 0.34));
+  border-bottom: 1px solid rgba(75, 58, 143, 0.12);
+}
+.pl-combos .combo .save {
+  display: inline-block;
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 5px 11px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.84);
+  border: 1px solid rgba(201, 118, 29, 0.34);
+  color: #3f6410;
+  margin-bottom: 13px;
+}
+.pl-combos .combo .flag {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  font-size: 8.6px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #00706a, #004b46);
+  color: #f4fdf6;
+}
+
+.pl-combos .stack { display: flex; align-items: flex-end; gap: 3px; }
+.pl-combos .stack .it { flex: 1 1 0; min-width: 0; text-align: center; }
+.pl-combos .stack .it .pimg { height: 66px; width: auto; margin: 0 auto 8px; object-fit: contain; filter: drop-shadow(0 5px 8px rgba(0, 74, 66, 0.13)); }
+.pl-combos .stack .it .pimg--empty {
+  height: 66px;
+  width: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px dashed rgba(75, 58, 143, 0.26);
+  color: var(--brand);
+}
+.pl-combos .stack .it .pimg--empty svg { height: 40px; width: auto; }
+.pl-combos .stack .it span { display: block; font-size: 8.6px; line-height: 1.32; color: var(--paper-2); font-weight: 600; }
+.pl-combos .stack .plus { flex: 0 0 9px; color: var(--accent); font-weight: 800; font-size: 12px; padding-bottom: 30px; text-align: center; }
+
+.pl-combos .combo .body { padding: 15px 16px 18px; display: flex; flex-direction: column; flex: 1; }
+.pl-combos .combo .body h3 {
+  font-family: var(--font-heading-family);
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.005em;
+  line-height: 1.1;
+  color: var(--surface);
+}
+.pl-combos .combo .cnt { font-size: 10.5px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--paper-2); margin-top: 6px; }
+.pl-combos .combo .inc { font-size: 12.4px; color: var(--paper-2); line-height: 1.55; margin: 11px 0 14px; flex: 1; }
+
+.pl-combos .combo .prow { display: flex; align-items: baseline; gap: 9px; flex-wrap: wrap; margin-bottom: 6px; }
+.pl-combos .combo .prow .price { font-family: var(--font-heading-family); font-size: 25px; font-weight: 800; color: var(--surface); letter-spacing: -0.02em; }
+.pl-combos .combo .prow .compare { font-size: 13px; color: var(--paper-3); }
+.pl-combos .combo .prow .saving {
+  font-style: normal;
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: rgba(201, 118, 29, 0.14);
+  border: 1px solid rgba(201, 118, 29, 0.36);
+  color: #3f6410;
+}
+.pl-combos .combo .fine { font-size: 10.4px; color: var(--paper-2); margin-bottom: 14px; }
+.pl-combos .combo .btn { width: 100%; justify-content: center; }
+
+.pl-combos .swipecue { display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 10px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--paper-2); margin-top: 2px; }
+.pl-combos .swipecue svg { width: 14px; height: 14px; color: var(--accent); }
+.pl-combos .railnote { text-align: center; font-size: 12px; color: var(--paper-2); margin-top: 14px; max-width: 62ch; margin-left: auto; margin-right: auto; }
+
+.pl-combos .combo-empty { text-align: center; color: var(--paper-2); padding: clamp(26px, 3.4vw, 40px); font-size: 14.5px; }
+
+@media (max-width: 760px) {
+  .pl-combos .comborail { margin: 0 -14px; padding: 4px 14px 12px; }
+  .pl-combos .combo { flex: 0 0 268px; }
+  .pl-combos .stack .it .pimg { height: 56px; }
+  .pl-combos .stack .it .pimg--empty { height: 56px; width: 38px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pl-combos .combo { transition: none; }
+  .pl-combos .combo:hover { transform: none; }
+}
