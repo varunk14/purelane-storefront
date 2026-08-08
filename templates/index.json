@@ -75,7 +75,16 @@
         "swipe_cue": "Swipe for more combos",
         "rail_note": "Tapping a combo opens its product page with everything ready to add. You can still swap anything before you pay."
       }
+    },
+    "bundles": {
+      "type": "bundles",
+      "settings": {
+        "scene": 4,
+        "kicker": "Build your bundle",
+        "heading": "One box. Every room.",
+        "lede": "Mix and match across kitchen, laundry, home and skin. One flat price, no code needed, free shipping either way."
+      }
     }
   },
-  "order": ["hero", "shop", "combos"]
+  "order": ["hero", "shop", "combos", "bundles"]
 }
