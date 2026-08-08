@@ -47,7 +47,21 @@
   padding: 12px 8px;
   border-radius: 20px;
 }
-.pl-hero .badge { text-align: center; padding: 11px 4px; }
+/* Reset the base theme's own .badge styling (Sale/Sold-out pills), which shares
+   this class name and otherwise leaks a white background, border and radius into
+   the hero promise badges. */
+.pl-hero .badge {
+  text-align: center;
+  padding: 11px 4px;
+  background: none;
+  border: 0;
+  border-radius: 0;
+  font-size: inherit;
+  line-height: normal;
+  letter-spacing: normal;
+  color: inherit;
+  word-break: normal;
+}
 .pl-hero .badge + .badge { border-top: 1px solid rgba(75, 58, 143, 0.12); }
 .pl-hero .badge .bi {
   width: 38px;
