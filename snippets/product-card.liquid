@@ -87,9 +87,8 @@
 
 {%- case variant -%}
 {%- when 'art' -%}
-  <span class="hp-art" data-card-variant="art"{% if sold_out %} data-sold-out="true"{% endif %}>
-    {{ product_image }}
-  </span>
+  {%- comment -%} artwork only: one product image for a stack (bundle tiers) {%- endcomment -%}
+  {{ product_image }}
 
 {%- when 'tray' -%}
   {%- comment -%}
